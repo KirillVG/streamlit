@@ -1,16 +1,13 @@
 # import module
 import streamlit as st
 import pandas as pd
-import numpy as np
 import altair as alt
-from pathlib import Path
 
 # Настройки среды
 st.set_page_config(layout="wide")
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
 #Путь к файлу-источнику
-#full_dis = "C:/py_app/dis/15022022_11.20.xlsx"
 full_dis = 'https://github.com/KirillVG/streamlit/raw/main/15022022_11.20.xlsx'
 
 @st.cache
@@ -121,13 +118,13 @@ col1, col2, = st.columns(2)
 with col1:
     st.subheader("Объем в пути в разрезе заводов,тн")
     bar1 = alt.Chart(volume_data).mark_bar().encode(
-    alt.X("Volume_tn:Q", title=None),alt.Y("factory", title=None),tooltip=["Volume_tn"]).properties(width=650,height=250).configure_view(strokeWidth=0)
+    alt.X("Volume_tn:Q", title=None),alt.Y("factory", title=None, sort=alt.SortField(field="Volume_tn",order='descending')),tooltip=["Volume_tn"]).properties(width=650,height=250).configure_view(strokeWidth=0)
     st.altair_chart(bar1)
 with col2:
     st.subheader("Объем в пути по типам вагонов, тн.")    
     bar2 = alt.Chart(vag_data).mark_bar().encode(
     alt.X('Volume_tn:Q', title=None),
-    alt.Y('Vagon_type',title=None),tooltip=["Volume_tn"]).properties(width=650,height=250).configure_view(strokeWidth=0)
+    alt.Y('Vagon_type',title=None, sort=alt.SortField(field="Volume_tn",order='descending')),tooltip=["Volume_tn"]).properties(width=650,height=250).configure_view(strokeWidth=0)
     st.altair_chart(bar2)
 
 st.subheader("Объем в пути по станциям назначения, тн")    
@@ -179,18 +176,3 @@ all_data_1=all_data[(all_data.destination_station==option_2) & (all_data.factory
 st.write(all_data_1)
 
 
-
-#******************************************************************************************
-#with col3:
-#    st.caption("Объем в брошенных вагонах")
-#    bar = alt.Chart(ab_vag_data).mark_bar().encode(
-#    alt.X('volume',scale=alt.Scale(domain=(0,100))),
-#    y='type_vag',
-#    color=alt.condition(pts, alt.ColorValue("steelblue"), alt.ColorValue("grey"))
-#    ).properties(
-#    width=450,
-#    height=500
-#    ).add_selection(pts)
-#    st.altair_chart(bar)
-#    #sns.catplot(x="volume", y="type_vag", kind="bar", data=ab_vag_data, palette="rocket")
-#    #st.pyplot()
